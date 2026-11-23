@@ -1,0 +1,163 @@
+Google One AI Pro 一键下单工具  使用说明
+========================================
+
+【免责声明】
+  本项目仅供学习与研究 Play 计费（BillingClient）机制使用。
+  - 不得用于商业用途，不得用于违反 Google 服务条款的行为
+  - 使用后果（封号、扣费、数据丢失等）由使用者自行承担
+  - 本项目不含任何账号、卡号、支付凭证，不收集任何用户数据
+  - 所有档位由 Google 服务端下发，随时可能失效
+  如有侵权或内容不当，请通过 GitHub Issues 联系，收到通知后立即删除。
+
+【重要变更】
+  Ultra 和 AI Plus 的促销档已在 2026-11 被 Google 全面下架
+  （Ultra 扫了 6000+ 个 SKU 组合，美区/日区均 0 命中）
+  相关脚本已移除，本工具只保留 Pro (5 TB) 档位。
+
+
+【安装图解】
+  不会开 ROOT / ADB、不会装 Play 商店的，先看 INSTALL.md
+    图片\1_MuMu开启ROOT权限.jpg            图一：开启 ROOT 权限
+    图片\2_MuMu开启ADB权限.png             图二：开启 ADB 权限
+    图片\3_下载GooglePlay和GoogleOne.jpg   图三：下载 Play 商店和 Google One
+
+
+一、环境要求
+----------------------------------------
+  1. MuMu 模拟器（Android 12，x86_64），必须开启 ROOT 和 ADB（见安装图解 图一/图二）
+  2. Python 3.9+
+  3. Play 商店已登录 Google 账号，且已绑定付款方式
+     （免费试用也要验证卡，$0 不扣款）
+  4. frida 必须是 16.x（17.x 移除了 Java bridge，全部失效）
+
+
+二、安装
+----------------------------------------
+  双击  一键安装环境.bat
+  （安装脚本最后会自动自检；想单独再查一次就运行 一键安装环境.bat check）
+
+  自检全绿才可以跑：
+    OK 设备已连接
+    OK frida-server 已启动
+    OK 计费模块已就位
+    OK Play 商店进程在跑
+    OK frida：16.5.9
+
+
+三、免费区
+----------------------------------------
+  目录：免费区\
+
+  1_Pro_免费18个月.bat    g1.2tb.ai.18months_eft    ★最长，一步到位
+  2_Pro_免费15个月.bat    g1.2tb.ai.15months_eft
+  3_Pro_免费12个月.bat    g1.2tb.ai.12months_eft
+  4_Pro_免费6个月.bat     g1.2tb.ai.6months_eft
+  5_Pro_免费4个月.bat     g1.2tb.ai.4months_eft
+  6_Pro_免费3个月.bat     g1.2tb.ai.3months_eft
+  7_Pro_免费2个月.bat     g1.2tb.ai.2months_eft
+  8_Pro_免费1个月.bat     g1.2tb.ai.1month_eft
+
+  叠加（需要已有活跃订阅）：
+  9_Pro_叠加6个月_第1次.bat    --stack --plan pro6
+  10_Pro_叠加6个月_第2次.bat   --stack --plan pro6b
+  11_Pro_叠加6个月_备用.bat    --stack --plan pro6c
+
+  【24 个月最短路径】
+    先跑 1_ 拿 18 个月，再跑 9_ 和 10_ 各叠 6 个月
+
+  另有 4 个免费 offer 在 g1.2tb.ai.subs_variant 上：
+    12months-eft / 6months-eft / 6months-eft-2 / 6months-eft-ss-2026
+    （就是 9_ / 10_ / 11_ 用的那三个）
+
+四、付费区
+----------------------------------------
+  目录：付费区\
+
+  1_Pro_年付1.99_12个月.bat    g1.2tb.ai.12months_ip_90p
+      首期 US$1.99/月 x 12 个月 = US$23.88   ★年付最优
+      第 13 个月起 US$19.99/月
+
+  2_Pro_3个月1.99.bat          g1.2tb.ai.3months_ip_90p.acq
+      首期 US$1.99/月 x 3 个月 = US$5.97
+
+  3_Pro_1个月0.99.bat          g1.2tb.ai.1month_ip_95p.acq
+      首月 US四、付费档
+----------------------------------------
+  16_Pro5TB_年付1.99_12个月.bat    g1.2tb.ai.12months_ip_90p
+      首期 US$1.99/月 x 12 个月 = US$23.88   ★年付最优
+      第 13 个月起 US$19.99/月
+
+  18_Pro5TB_3个月1.99.bat          g1.2tb.ai.3months_ip_90p.acq
+      首期 US$1.99/月 x 3 个月 = US$5.97
+
+  20_Pro5TB_1个月0.99.bat          g1.2tb.ai.1month_ip_95p.acq
+      首月 US$0.99，之后 US$19.99/月
+
+  注意：付费档必须绑有效卡。免费档优先，免费比付费划算。
+
+
+.99，之后 US$19.99/月
+
+  注意：付费档必须绑有效卡。免费档优先，免费比付费划算。
+
+五、查询（只查不开）
+----------------------------------------
+  python query_sku.py <SKU>    看当前号某个档的报价
+
+  或命令行：
+    python query_sku.py g1.2tb.ai.18months_eft g1.2tb.ai.subs_variant
+
+
+六、SKU 命名体系
+----------------------------------------
+  g1.<档位>.<周期>_eft               免费试用（extended free trial）
+  g1.<档位>.<周期>_ip_<N>p[.acq|.wb] 付费首期优惠（N = 折扣百分比）
+  g1.<档位>.subs_variant             订阅变体（承载多个 offer）
+
+  档位：
+    2tb.ai               Google AI Pro (5 TB)        <- 主力
+    2tb.ai.subs_variant  Pro 5TB 试用变体
+    20tb / 30tb          Ultra（现已无促销）
+    ai.pro               Ultra 30TB（现已无促销）
+
+  周期：
+    1month / 2months / 3months / 4months / 6months
+    12months / 15months / 18months / 24months
+    1mo / 3mo / 6mo / 12mo / 1year
+
+  规律：
+    - _eft 档必须【不带】.acq / .wb 后缀，加了就查不到
+    - _ip_Np 档有的带 .acq，有的带 .wb，有的都不带，必须逐个试
+    - 没有 9months / 24months 的 _eft 档
+
+
+七、常见问题
+----------------------------------------
+  Play 商店闪退
+    -> 模拟器缺 Google 服务框架，用 MuMu 自带的「Google 安装器」装全套
+
+  查询全空（Play 商店在跑）
+    -> 账号卡在验证页（MinuteMaidActivity），在模拟器里完成 Google 账号验证
+
+  查询全空（Play 商店没跑）
+    -> 重启模拟器，打开 Play 商店
+
+  收银台一闪就没
+    -> 付款方式被拒，换一张卡
+
+  app_not_started
+    -> App 启动慢，脚本已改轮询 25 秒；仍失败就手动打开 Google One 再跑
+
+  frida 连不上
+    -> adb forward tcp:27042 tcp:27042，或重启 frida-server
+
+  device not found
+    -> 图二的 ADB 没开，或端口不对（用 --serial 指定）
+
+
+八、提醒
+----------------------------------------
+  - 免费试用到期前【必须取消】，否则按原价续费
+  - 同一账号的试用资格用一次就没了，别在主力号上乱试
+  - 建议用额度低的卡
+  - 所有档位由 Google 下发，随时可能变化

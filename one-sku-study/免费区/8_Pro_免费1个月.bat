@@ -1,0 +1,18 @@
+@echo off
+chcp 65001 >nul
+title Pro FREE 1 month
+cd /d "%~dp0.."
+set PYTHONIOENCODING=utf-8
+set PYTHONUTF8=1
+
+echo ============================================================
+echo   Google AI Pro (5 TB)  -  FREE TRIAL 1 MONTH
+echo   SKU: g1.2tb.ai.1month_eft
+echo   COST: US$0.00
+echo ============================================================
+echo.
+
+python pro0.py --account "current@device" --no-add --force --sku g1.2tb.ai.1month_eft
+
+echo.
+pause
